@@ -16,17 +16,21 @@ HELP_COMMAND = """
 <b>/help</b> - <em>список команд</em>
 <b>/start</b> - <em>Добро пожалвать!</em>
 <b>/give</b> - <em>отправка сообщения</em>
+<b>/картина</b> - <em>отправка фотография</em>
+<b>/картина</b> - <em>отправка фотография</em>
+<b>location</b> - <em>отправка местоположения</em>
 """
 
 @dp.message_handler(commands=["help"])
 async def reply_message(message: types.Message):
-    await message.reply(text=HELP_COMMAND, parse_mode="HTML")
+    await bot.send_message(chat_id=message.chat.id,
+                           text=HELP_COMMAND, parse_mode="HTML")
 
 
 @dp.message_handler(commands=["give"])
 async def get_heart(message: types.Message):
     await message.reply("Смотри какой котик 🖤")
-    await bot.send_sticker(message.from_user.id , sticker="CAACAgIAAxkBAAEH61tj_HUGW-93xu3i4UkMVICysQ_rQgACSwADUfywFhwds_v5xTvQLgQ")
+    await bot.send_sticker(message.chat.id , sticker="CAACAgIAAxkBAAEH61tj_HUGW-93xu3i4UkMVICysQ_rQgACSwADUfywFhwds_v5xTvQLgQ")
 
 @dp.message_handler(content_types=["sticker"])
 async def send_sticker_id(message: types.Message):
@@ -39,7 +43,18 @@ async def start(message: types.Message):
     await message.reply(text="Меня зовут бот телеграм, спасибо что пользуетесь мной!)")
 
 
+@dp.message_handler(commands="картина")
+async def send_image(message: types.Message):
+    await bot.send_photo(chat_id=message.chat.id, photo="https://www.google.com/imgres?imgurl=https%3A%2F%2Fyt3.googleusercontent.com%2FifZJFKoXaasijKlvMxM43d1lXCsvTjJgujLvEWCvv68e8rHKSg2OmixwdRBp_L_50uQBviQOHA%3Ds900-c-k-c0x00ffffff-no-rj&imgrefurl=https%3A%2F%2Fm.youtube.com%2Fc%2FSinsTV%2Fvideos&tbnid=dmKggxhhpwRohM&vet=12ahUKEwi3nt-my7X9AhXGsyoKHajaAVMQMygAegUIARCVAQ..i&docid=le-xNc8nOa7TUM&w=900&h=900&q=johny%20sins&ved=2ahUKEwi3nt-my7X9AhXGsyoKHajaAVMQMygAegUIARCVAQ")
 
+
+
+@dp.message_handler(commands="location")
+async def send_loc(message: types.Message):
+    await bot.send_location(chat_id=message.from_user.id,
+                            latitude=55,
+                            longitude=74,
+                            )
 # @dp.message_handler()
 # async def message_give(message: types.Message):
 #     await message.reply(text=str(message.text.count("🌟")))
@@ -119,4 +134,5 @@ async def start(message: types.Message):
 
 
 if __name__ == "__main__":
-    executor.start_polling(dp, on_startup= on_startup)
+    executor.start_polling(dp, skip_updates=True)
+
