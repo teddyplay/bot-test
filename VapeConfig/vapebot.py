@@ -12,6 +12,49 @@ dp = Dispatcher(bot)
 async def on_startup(_):
     print("Бот был успешно запущен!")
 
+HELP_COMMAND = """
+<b>/help</b> - <em>список команд</em>
+<b>/start</b> - <em>Добро пожалвать!</em>
+<b>/give</b> - <em>отправка сообщения</em>
+"""
+
+@dp.message_handler(commands=["help"])
+async def reply_message(message: types.Message):
+    await message.reply(text=HELP_COMMAND, parse_mode="HTML")
+
+
+@dp.message_handler(commands=["give"])
+async def get_heart(message: types.Message):
+    await message.reply("Смотри какой котик 🖤")
+    await bot.send_sticker(message.from_user.id , sticker="CAACAgIAAxkBAAEH61tj_HUGW-93xu3i4UkMVICysQ_rQgACSwADUfywFhwds_v5xTvQLgQ")
+
+@dp.message_handler(content_types=["sticker"])
+async def send_sticker_id(message: types.Message):
+    await message.answer(message.sticker.file_id)
+    await bot.send_sticker(message.from_user.id , sticker="CAACAgIAAxkBAAPmY_x_MH3jeHLYxPV8w99GXMU02QkAAiUAA1H8sBbysevWLkTmZy4E")
+
+
+@dp.message_handler(commands=["start"])
+async def start(message: types.Message):
+    await message.reply(text="Меня зовут бот телеграм, спасибо что пользуетесь мной!)")
+
+
+
+# @dp.message_handler()
+# async def message_give(message: types.Message):
+#     await message.reply(text=str(message.text.count("🌟")))
+
+
+
+#
+#
+# @dp.message_handler()
+# async def post_heart(message: types.Message):
+#     if message.text == '🖤':
+#         await message.reply("❤️")
+#         await message.delete()
+
+
 
 
 # @dp.message_handler(commands=["start"])
@@ -30,10 +73,7 @@ async def on_startup(_):
 
 
 
-# HELP_COMMAND = """
-# /help - список команд
-# /start - начать работу с ботом
-# """
+
 # count = 0
 #
 # @dp.message_handler()
@@ -79,4 +119,4 @@ async def on_startup(_):
 
 
 if __name__ == "__main__":
-    executor.start_polling(dp)
+    executor.start_polling(dp, on_startup= on_startup)
